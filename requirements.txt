@@ -1,0 +1,5 @@
+# XChange Bot Requirements
+aiohttp>=3.12.13
+python-dotenv>=1.1.1
+python-telegram-bot>=22.2
+requests>=2.32.4

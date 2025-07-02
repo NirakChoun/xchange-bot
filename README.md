@@ -30,7 +30,7 @@ A modern, feature-rich Telegram bot for real-time currency exchange rates and co
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/NirakChoun/xchange-bot.git
    cd xchange-bot
    ```
 

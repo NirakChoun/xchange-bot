@@ -97,6 +97,11 @@ class CurrencyData:
     }
     
     @classmethod
+    def get_currencies(cls) -> list:
+        """Get list of all supported currency codes"""
+        return cls.CURRENCIES.copy()
+    
+    @classmethod
     def get_flag_emoji(cls, currency_code: str) -> str:
         """Get flag emoji for currency code"""
         return cls.FLAG_EMOJIS.get(currency_code.lower(), '💱')

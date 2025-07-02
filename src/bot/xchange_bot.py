@@ -22,7 +22,6 @@ class XChangeBot:
     
     def __init__(self, token: str):
         self.app = ApplicationBuilder().token(token).build()
-        self.currency_data = CurrencyData()
         self.api_service = APIService()
         self.formatter = MessageFormatter()
         self.keyboard_builder = KeyboardBuilder()
@@ -250,11 +249,11 @@ class XChangeBot:
     # Helper Methods
     def _get_flag_emoji(self, currency_code: str) -> str:
         """Get flag emoji for currency code"""
-        return self.currency_data.get_flag_emoji(currency_code)
+        return CurrencyData.get_flag_emoji(currency_code)
     
     def _get_currency_symbol(self, currency_code: str) -> str:
         """Get currency symbol for currency code"""
-        return self.currency_data.get_currency_symbol(currency_code)
+        return CurrencyData.get_currency_symbol(currency_code)
     
     def _build_welcome_message(self, first_name: str) -> str:
         """Build welcome message"""
@@ -304,9 +303,9 @@ Ready to start exchanging? 🚀"""
         """Build currencies list message"""
         message = "🌍 **Supported Currencies:**\n\n"
         
-        for code in self.currency_data.get_currencies():
+        for code in CurrencyData.get_currencies():
             flag_emoji = self._get_flag_emoji(code)
-            currency_name = self.currency_data.get_currency_name(code)
+            currency_name = CurrencyData.get_currency_name(code)
             message += f"{flag_emoji} **{code.upper()}** - {currency_name}\n"
         
         return message
@@ -324,7 +323,7 @@ Ready to start exchanging? 🚀"""
         message += f"{flag_emoji} **USD** = $1.00 (Base)\n"
         
         # Show other currencies
-        for code in self.currency_data.get_currencies():
+        for code in CurrencyData.get_currencies():
             if code != 'usd' and code in usd_rates:
                 rate = usd_rates[code]
                 flag_emoji = self._get_flag_emoji(code)
@@ -364,7 +363,7 @@ Ready to start exchanging? 🚀"""
             past_rates = past_data.get('usd', {})
             message += f"📅 From: {past_date} → {current_date}\n\n"
             
-            for code in self.currency_data.get_currencies()[:10]:  # Limit to first 10
+            for code in CurrencyData.get_currencies()[:10]:  # Limit to first 10
                 if code != 'usd' and code in current_rates and code in past_rates:
                     current_rate = current_rates[code]
                     past_rate = past_rates[code]
@@ -396,7 +395,7 @@ Ready to start exchanging? 🚀"""
     
     def _build_convert_help_message(self) -> str:
         """Build convert help message"""
-        currency_list = ", ".join([code.upper() for code in self.currency_data.get_currencies()])
+        currency_list = ", ".join([code.upper() for code in CurrencyData.get_currencies()])
         
         return f"""🔄 **Currency Converter**
 
@@ -437,14 +436,14 @@ Ready to start exchanging? 🚀"""
         to_currency = args[2].lower()
         
         # Validate currencies
-        if not self.currency_data.is_supported_currency(from_currency):
+        if not CurrencyData.is_supported_currency(from_currency):
             return {
                 'error': True,
                 'message': f"❌ **'{from_currency.upper()}' is not supported!**\n\n"
                           f"Use `/convert` to see supported currencies."
             }
         
-        if not self.currency_data.is_supported_currency(to_currency):
+        if not CurrencyData.is_supported_currency(to_currency):
             return {
                 'error': True,
                 'message': f"❌ **'{to_currency.upper()}' is not supported!**\n\n"
